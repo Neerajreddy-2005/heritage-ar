@@ -13,7 +13,6 @@ interface HeritageSite {
   description: string;
   year: string;
   image?: string;
-  fullInfo?: boolean; // Added for the new card overlay
 }
 
 const heritageSites: HeritageSite[] = [
@@ -188,34 +187,26 @@ const Tour: React.FC = () => {
                   <img
                     src={`/${selectedSite.image}`}
                     alt={selectedSite.name}
-                    className="w-full h-auto mb-2 rounded"
-                    style={{ maxWidth: 400 }}
+                    className="w-24 h-20 object-cover mb-3 rounded mx-auto"
+                    style={{ display: 'block' }}
+                    onError={(e) => {
+                      console.error('Image failed to load:', selectedSite.image);
+                      e.currentTarget.style.display = 'none';
+                    }}
+                    onLoad={() => console.log('Image loaded successfully:', selectedSite.image)}
                   />
                 )}
                 <p className="text-heritage-300 mb-2 line-clamp-3">{selectedSite.description}</p>
                 <p className="text-heritage-400 mb-2"><strong>Period:</strong> {selectedSite.year}</p>
                 <p className="text-heritage-400 mb-4"><strong>Category:</strong> {selectedSite.category.charAt(0).toUpperCase() + selectedSite.category.slice(1)}</p>
-                {!selectedSite.fullInfo ? (
-                  <button
-                    className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 transition"
-                    onClick={() => setSelectedSite({ ...selectedSite, fullInfo: true })}
-                  >
-                    Learn More
-                  </button>
-                ) : (
-                  <>
-                    <p className="text-heritage-200 mb-2">{selectedSite.description}</p>
-                    {/* Add more detailed info here if available */}
-                    <a
-                      href={`/models/${encodeURIComponent(selectedSite.name)}`}
-                      className="inline-block mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View Model
-                    </a>
-                  </>
-                )}
+                <a
+                  href={`/models/${encodeURIComponent(selectedSite.name)}`}
+                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Model
+                </a>
               </div>
             )}
           </div>
